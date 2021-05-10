@@ -5,7 +5,7 @@ const PORT = 8080; // default port 8080
 app.set("view engine", "ejs");
 
 const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -60,5 +60,16 @@ app.post("/urls", (req, res) => {
 });
 
 function generateRandomString() {
+  let result1 = "";
+  let result = [];
+  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let charactersLength = characters.length;
+  
+  for (let i = 0; i < length.length; i++) {
+    result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
+  }
 
+  result1 = result.join('');
+  let truncString = result1.substring(0, 6);
+  return truncString;
 }
