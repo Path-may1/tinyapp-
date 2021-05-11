@@ -52,7 +52,8 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURLcd 
+ console.log("received request")
+  const shortURL = req.params.shortURL 
    const longURL = urlDatabase[shortURL]
   res.redirect(longURL);
 });
@@ -69,6 +70,18 @@ app.post("/urls", (req, res) => {
   urlDatabase[urlName] = req.body.longURL;
   res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
+// new code added for delete
+app.post('/urls/:shortURL/delete',  (req,res) => {
+  console.log(req.params)
+  // extract the id from the path :req.params.shortUrl
+  const id = req.params.shortURL
+  // delete the entry for that id in database
+  delete urlDatabase[id]
+  //redirect to tinyap
+  res.redirect('/urls');
+});
+
+
 function generateRandomString() {
   let result1 = "";
   let result = [];
