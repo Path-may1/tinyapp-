@@ -42,16 +42,21 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+app.get("/my_urls", (req, res) => {
+  const templateVars = { urls: urlDatabase };
+  res.render("urls_index", templateVars);
+});
+
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURL
+  const shortURL = req.params.shortURLcd 
    const longURL = urlDatabase[shortURL]
   res.redirect(longURL);
 });
-app.get("/urls/:shortURL/:userId/:productId", (req, res) => {
+app.get("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   console.log(shortURL)
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURL] };
