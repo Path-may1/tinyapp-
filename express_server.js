@@ -29,6 +29,19 @@ const urlDatabase = {
   "4mp89x": "http://amazon.ca"
 };
 
+// global object user database
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+}
 // end points || routes
 
 app.get("/", (req, res) => {
@@ -131,7 +144,24 @@ app.get('/register', (req, res) =>{
     username: req.cookies["username"]
   };
   res.render('register',templateVars)
+});
+
+app.post('/register', (req, res) => {
+const loginInfo =(req.body)
+//console.log(req.body)
+let user_id = generateRandomString()
+//console.log(userID)
+console.log("before",users) 
+users[user_id] = {
+  id : user_id,
+  email: req.body.email,
+  password: req.body.password
+}
+console.log("after",users) 
+user_id : req.cookies["usefID"]
 })
+
+
 
 //function to generate random 6 digit alphanumeric string
 function generateRandomString() {
