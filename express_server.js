@@ -7,6 +7,16 @@ app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
 //app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
+let cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
+// const templateVars = {
+//  username : cookieName,
+//   //username: req.cookies["username"]
+//   // ... any other vars
+// };
+res.render("urls_index", templateVars);
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -93,6 +103,19 @@ urlDatabase[id] = req.body.Url
 res.redirect('/urls')
 })
 
+app.post('/login', (req,res) => {
+  const cookieName = req.body.username
+  res.cookie("username",cookieName) 
+  console.log(cookieName)
+  res.redirect('/urls')
+})
+
+// app.post('/logout', (req,res) => {
+//   const cookieName = req.body.username
+//   res.cookie("username",cookieName) 
+//   console.log(cookieName)
+//   res.redirect('/urls')
+// })
 
 function generateRandomString() {
   let result1 = "";
