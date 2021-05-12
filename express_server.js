@@ -5,20 +5,15 @@ const app = express();
 
 const PORT = 8080; // default port 8080
 
-//settign ejs as template engine
+//setting ejs as template engine
 app.set("view engine", "ejs");
 
 const bodyParser = require("body-parser");
-//app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 let cookieParser = require('cookie-parser')
 app.use(cookieParser());
 
-// const templateVars = {
-//  username : cookieName,
-//   //username: req.cookies["username"]
-//   // ... any other vars
-// };
+
 
 app.get("/urls", (req, res) => {
   const templateVars = { 
@@ -51,15 +46,6 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>hello <b>World</b></body></html>\n");
 });
 
-// app.get("/set", (req, res) => {
-//   const a = 1;
-//   res.send(`a = ${a}`);
-// });
-
-// app.get("/fetch", (req, res) => {
-//   res.send(`a = ${a}`);
-// });
-
 
 app.get("/urls", (req, res) => {
   const templateVars = { 
@@ -81,7 +67,7 @@ app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[shortURL]
   res.redirect(longURL);
 });
-
+// route to edit
 app.get("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   console.log(shortURL)
@@ -102,6 +88,7 @@ app.post("/urls", (req, res) => {
   urlDatabase[urlName] = req.body.longURL;
   res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
+
 // new code added for delete
 app.post('/urls/:shortURL/delete', (req, res) => {
   console.log(req.params)
@@ -112,7 +99,8 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   //redirect to tinyap
   res.redirect('/urls');
 });
-//add 
+
+//route to update the database with new url
 app.post('/urls/edit/:shortURL', (req, res) => {
   console.log(req.params.shortURL)
   const id = req.params.shortURL
@@ -120,6 +108,7 @@ app.post('/urls/edit/:shortURL', (req, res) => {
   urlDatabase[id] = req.body.Url
   res.redirect('/urls')
 })
+
 // Login route
 app.post('/login', (req, res) => {
   const cookieName = req.body.username
@@ -136,6 +125,15 @@ app.post('/logout', (req, res) => {
      res.redirect('/urls')
 })
 
+app.get('/register', (req, res) =>{
+  const templateVars = { 
+    urls: urlDatabase, 
+    username: req.cookies["username"]
+  };
+  res.render('register',templateVars)
+})
+
+//function to generate random 6 digit alphanumeric string
 function generateRandomString() {
   let result1 = "";
   let result = [];
