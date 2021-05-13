@@ -13,15 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 let cookieParser = require('cookie-parser')
 app.use(cookieParser());
 
-
-
-app.get("/urls", (req, res) => {
-  const templateVars = { 
-    urls: urlDatabase, 
-    username: req.cookies["username"]
-  };
-  res.render("urls_index", templateVars);
-});
 // datebase => shortUrl and longUrl
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -39,10 +30,26 @@ const users = {
  "user2RandomID": {
     id: "user2RandomID", 
     email: "user2@example.com", 
-    password: "dishwasher-funk"
+    password: "abcd"
   }
 }
+
+//function of compare email if found
+
+const findUserByEmail = (email) => {
+  for(let userID in users) {
+    if(users[userID]["email"] === email){
+    return users[userID]
+    }
+  }
+    return false;
+}
+//const userFound = findUserByEmail(email)
+//console.log("userfound",userFound)
+
 // end points || routes
+
+
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -61,9 +68,10 @@ app.get("/hello", (req, res) => {
 
 
 app.get("/urls", (req, res) => {
+  //console.log("hi",req.sessions["user_id"])
   const templateVars = { 
     urls: urlDatabase, 
-    username: req.cookies["username"]
+    username: users[req.cookies["user_id"]]
   };
   res.render("urls_index", templateVars);
 });
@@ -71,7 +79,11 @@ app.get("/urls", (req, res) => {
 
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  const templateVars = { 
+  username: req.cookies["username"]
+  };
+  
+  res.render("urls_new", templateVars);
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -123,25 +135,25 @@ app.post('/urls/edit/:shortURL', (req, res) => {
 })
 
 // Login route
-app.post('/login', (req, res) => {
-  const cookieName = req.body.username
-  res.cookie("username", cookieName)
-  console.log(cookieName)
-  res.redirect('/urls')
-})
+// app.post('/login', (req, res) => {
+//   const cookieName = req.body.username
+//   res.cookie("username", cookieName)
+//   console.log(cookieName)
+//   res.redirect('/urls')
+// })
 // Logout route
 app.post('/logout', (req, res) => {
   //   const cookieName = req.body.username
   //   res.cookie("username",cookieName) 
   //   console.log(cookieName)
-  res.clearCookie('username', req.body.username )
+  res.clearCookie('user_id', req.body.username )
      res.redirect('/urls')
 })
 
 app.get('/register', (req, res) =>{
   const templateVars = { 
     urls: urlDatabase, 
-    username: req.cookies["username"]
+    username: req.cookies["user_id"]
   };
   res.render('register',templateVars)
 });
@@ -152,15 +164,62 @@ const loginInfo =(req.body)
 let user_id = generateRandomString()
 //console.log(userID)
 console.log("before",users) 
-users[user_id] = {
+if((req.body.email === "") || (req.body.password === "")) {
+   return res.status(404)
+}
+ if (users[user_id]) {
+  res.status(404)
+} else {
+  users[user_id] = {
   id : user_id,
   email: req.body.email,
   password: req.body.password
 }
 console.log("after",users) 
-user_id : req.cookies["usefID"]
+//user_id : req.cookies["user_id"]
+res.cookie("user_id", user_id)
+res.redirect('/urls')
+}
 })
 
+// diplaying login_form
+app.get('/login_form', (req,res)  =>{
+console.log(req.cookies)
+let userID = req.cookies['user_id']
+const tempname = {
+  username: userID
+}
+
+
+res.render('login_form',tempname)
+
+})
+
+app.post('/login', (req,res) => {
+// extract email and password
+const email = req.body.email
+const password = req.body.password
+console.log (email, password)
+
+//find the user object that email
+const userFound = findUserByEmail(email)
+
+// if user found in db, then compare the password
+
+  if(userFound && userFound.password === password){
+//if they match , log the user in
+console.log("hello",userFound)
+res.cookie('user_id', userFound.id)  
+res.redirect('/urls')
+// res cookie
+
+// else show error message
+} else {
+res.status(403).send("Email not found")
+
+} 
+
+})
 
 
 //function to generate random 6 digit alphanumeric string
