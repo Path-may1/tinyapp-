@@ -10,16 +10,23 @@ app.set("view engine", "ejs");
 
 const bodyParser = require("body-parser");
 app.use(express.urlencoded({ extended: true }));
+
 let cookieParser = require('cookie-parser')
 app.use(cookieParser());
 
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
+});
 // datebase => shortUrl and longUrl
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
   "4mp89x": "http://amazon.ca"
 };
-
+const urlDatabase1 = {
+  b6UTxQ: { longURL: "https://www.example.com", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" },
+};
 // global object user database
 const users = { 
   "userRandomID": {
@@ -44,20 +51,21 @@ const findUserByEmail = (email) => {
   }
     return false;
 }
-//const userFound = findUserByEmail(email)
-//console.log("userfound",userFound)
 
 // end points || routes
 
-
-
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  //***** */ if the userid is present{
+  //***res.redirect('/urls')
+  // }else {
+    res.redirect('/login_form')
+  //
+  //res.send("Hello!");
 });
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Example app listening on port ${PORT}!`);
+// });
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
@@ -72,9 +80,13 @@ app.get("/urls", (req, res) => {
   const templateVars = { 
     urls: urlDatabase, 
     username: users[req.cookies["user_id"]]
-  };
+   };
+ 
+ 
   res.render("urls_index", templateVars);
+  
 });
+
 
 
 
@@ -82,8 +94,10 @@ app.get("/urls/new", (req, res) => {
   const templateVars = { 
   username: req.cookies["username"]
   };
+  //new code allowing users to access the urls/new page
   
   res.render("urls_new", templateVars);
+  
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -167,8 +181,10 @@ console.log("before",users)
 if((req.body.email === "") || (req.body.password === "")) {
    return res.status(404)
 }
- if (users[user_id]) {
-  res.status(404)
+ 
+   if(findUserByEmail(loginInfo.email)){
+    res.redirect('/login_form')
+  
 } else {
   users[user_id] = {
   id : user_id,
@@ -224,8 +240,7 @@ res.status(403).send("Email not found")
 
 //function to generate random 6 digit alphanumeric string
 function generateRandomString() {
-  let result1 = "";
-  let result = [];
+ let result = [];
   let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let charactersLength = characters.length;
 
