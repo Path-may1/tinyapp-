@@ -7,34 +7,19 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" href="/urls">My URLs</a>
+        <a class="nav-item nav-link" href="/my_urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
-       
       </div>
     </div>
+    <body>
+      <%- include('partials/_header') %>
+      <form method="POST" action="/login">
+        <div class="container">
+        <input type="email" placeholder="Enter email" name="email" required>
+        <input type="password" placeholder="password" name="password" required>
+        <button type="submit"> value="Login"</button>
+        </div>
+      </form>
+
+    </body>
    
-   <% if(username) { %>
-    Logged in as <%= username.email %>
-   
-    <form method="POST" action="/logout">
-      <div class="container">
-        <label>Username : </label>
-       <input type="submit" value= "Logout">
-      </div>
-    </form> 
-
-
-   <% }else { %>
-    <a class="nav-item nav-link" href="/login_form">Login</a>
-     <a class="nav-item nav-link" href="/register">Register</a>
-
-
-   <% } %>
-
-  </nav>
-
-
-  <!-- // new code added -->
-
-  <!-- // code ending -->
-</header>
