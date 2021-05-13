@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -7,15 +7,18 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-    <title>New URL - Register</title>
+    <title>Register</title>
   </head>
 
   <body>
 
     <%- include('partials/_header') %>
+    <h2>Create Account</h2>
     <form method="POST" action="/register">
       <div class="container">
+      <p>Enter Email address</p>
       <input type="email" placeholder="Enter email" name="email" required>
+      <h4>Enter Password</h4>
       <input type="password" placeholder="password" name="password" required>
       <button type="submit">Register</button>
       </div>
