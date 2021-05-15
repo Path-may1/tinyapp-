@@ -171,7 +171,7 @@ app.get("/urls/:shortURL", (req, res) => {
     shortURL: req.params.shortURL,
     longURL: urlDatabase1[shortURL]['longURL'],
     //username: req.session["username"]
-    username : req.session.user_id
+    username : req.session['user_id']
   };
   res.render("urls_show", templateVars);
 });
