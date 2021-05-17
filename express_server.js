@@ -177,7 +177,6 @@ app.post('/register', (req, res) => {
   }
 });
 
-// Route allows user to login.
 app.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
