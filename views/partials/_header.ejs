@@ -15,26 +15,14 @@
    
    <% if(username) { %>
     Logged in as: <%= username.email %>
-   
     <form method="POST" action="/logout">
       <div class="container">
       <input type="submit" value= "Logout">
       </div>
     </form> 
-
-
    <% }else { %>
-   
-    <a class="nav-item nav-link" href="/login_form">Login</a>
-     <a class="nav-item nav-link" href="/register">Register</a>
-
-
+      <a class="nav-item nav-link" href="/login_form">Login</a>
+      <a class="nav-item nav-link" href="/register">Register</a>
    <% } %>
-
   </nav>
-
-
-  <!-- // new code added -->
-
-  <!-- // code ending -->
 </header>
